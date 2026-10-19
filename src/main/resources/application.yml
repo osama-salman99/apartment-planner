@@ -1,0 +1,46 @@
+server:
+  port: 8230
+  # Sits behind Caddy on 127.0.0.1, same as every other service in the fleet.
+  address: 127.0.0.1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/home-app-db;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+# home-app is intentionally PUBLIC — anyone can open home.osmosis.work with no login. We reuse
+# auth-core's SsoSecurityConfig but mark every path public (public-paths: /**), so the SSO wall
+# never 302s to auth.osmosis.work. The SsoCookieAuthFilter still runs and authenticates a request
+# that happens to carry the shared cookie, but a cookie is no longer required for any page.
+# The layout API is a JSON PUT with no CSRF token, so it keeps the csrf-ignore treatment.
+#
+# ONE EXCEPTION, by a higher-precedence chain because ordering means it cannot be done here —
+# `/**` below permits everything and Spring matches in order: /api/designs/** and
+# /api/default-design hold the saved layouts (DesignSecurityConfig, which answers 401 rather than
+# redirecting because they are XHR endpoints behind a page that must keep working signed out).
+# (The photo library that used to need its own exception moved out to media.osmosis.work.)
+osmosis:
+  auth:
+    public-paths: /**
+    csrf-ignore-patterns: /api/**
+
+app:
+  admin:
+    username: ${ADMIN_USERNAME:osmosis}
+  # The flat's address, shown only to a signed-in visitor (PlaceController). Leave blank for none.
+  place:
+    unit: ${PLACE_UNIT:}
+    street: ${PLACE_STREET:}
+    postcode: ${PLACE_POSTCODE:}
+    city: ${PLACE_CITY:}

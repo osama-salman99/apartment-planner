@@ -1,0 +1,17 @@
+// The 3D frontend (React + Vite + three.js), built with npm. It is a Gradle project of its own so
+// that `--parallel` builds it while the Java code compiles; inside one project Gradle runs tasks one
+// after the other, which made the release build wait for npm and javac in turn.
+
+tasks.register('npmInstall', Exec) {
+    commandLine 'sh', 'scripts/install-deps.sh'
+    inputs.file('package-lock.json')
+    outputs.dir('node_modules')
+}
+
+tasks.register('npmBuild', Exec) {
+    dependsOn npmInstall
+    commandLine 'npm', 'run', 'build'
+    inputs.dir('src')
+    inputs.file('index.html')
+    outputs.dir('dist')
+}

@@ -1,0 +1,10 @@
+build/
+.gradle/
+frontend/node_modules/
+frontend/dist/
+frontend/tsconfig.tsbuildinfo
+*.log
+data/
+*.mv.db
+*.trace.db
+frontend/public/products.json

@@ -1,0 +1,70 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.1.1'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'work.osmosis'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(":auth-core")
+    implementation project(":version-core")
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.h2database:h2'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.springframework.boot:spring-boot-resttestclient'
+    testImplementation 'org.springframework.boot:spring-boot-restclient'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// The 3D frontend (React + Vite + three.js) lives in frontend/ and is built with npm, by its own
+// Gradle project (frontend/build.gradle). Wiring it into the build means `./gradlew clean build`
+// alone produces a complete jar, same one-command convention as every other service in the fleet.
+
+// Spring Boot only serves classpath:/static/**, so the built frontend has to land under a
+// "static" folder in the resources output — not just merged into the resources root.
+tasks.register('copyFrontend', Copy) {
+    dependsOn ':frontend:npmBuild'
+    from 'frontend/dist'
+    into "$buildDir/resources-frontend/static"
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir "$buildDir/resources-frontend"
+        }
+    }
+}
+
+processResources.dependsOn copyFrontend
+
+// Bake the build version into the frontend badge (index.html) and the /version
+// resource (from -PosmosisVersion=v<run> in CI; 'dev' for local builds).
+processResources {
+    def osmosisVersion = (project.findProperty('osmosisVersion') ?: 'dev').toString()
+    inputs.property('osmosisVersion', osmosisVersion)
+    filesMatching(['static/index.html', 'osmosis-version']) {
+        filter(ReplaceTokens, tokens: [OSMOSIS_VERSION: osmosisVersion])
+    }
+}

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Home</title>
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f4f2ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#14171c" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Build-version badge: white chip pinned bottom-left; green if this tab is
+         on the latest build, red if a newer build is running (stale cache). -->
+    <style>
+      #osmosis-ver{position:fixed;left:0;bottom:0;z-index:2147483000;padding:2px 5px;border-top-right-radius:4px;background:#fff;border-top:1px solid rgba(0,0,0,.12);border-right:1px solid rgba(0,0,0,.12);box-shadow:0 -1px 3px rgba(0,0,0,.06);font:600 10px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.02em;color:#1a7f37;user-select:none;pointer-events:none}
+      #osmosis-ver.stale{color:#d1242f}#osmosis-ver{background:#fff;border-top-color:rgba(0,0,0,.12);border-right-color:rgba(0,0,0,.12);box-shadow:0 -1px 3px rgba(0,0,0,.06);color:#1a7f37}#osmosis-ver.stale{color:#d1242f}@media (prefers-color-scheme:dark){#osmosis-ver{background:#161B22;border-top-color:rgba(255,255,255,.14);border-right-color:rgba(255,255,255,.14);box-shadow:none;color:#3fb950}#osmosis-ver.stale{color:#f87171}}@media (display-mode:standalone),(hover:hover) and (pointer:fine){#osmosis-ver{--vb:rgba(255,255,255,.9);--vl:rgba(0,0,0,.12);left:24px;bottom:24px;margin:0;padding:0;background:none;border:0;border-radius:0;box-shadow:none;opacity:1;font-size:11px;line-height:1;color:#1a7f37;transform:translate(-50%,50%) rotate(45deg)}#osmosis-ver.stale{color:#cf222e}#osmosis-ver::before{content:"";position:absolute;z-index:-1;left:50%;top:50%;width:150px;height:150px;margin:-129px 0 0 -75px;border-radius:50%;background:radial-gradient(circle,transparent 45.5px,var(--vl) 46.5px,var(--vb) 47.5px);-webkit-mask:conic-gradient(transparent 128deg,#000 150deg 210deg,transparent 232deg);mask:conic-gradient(transparent 128deg,#000 150deg 210deg,transparent 232deg)}@media (prefers-color-scheme:dark){#osmosis-ver{--vb:rgba(22,27,34,.92);--vl:rgba(255,255,255,.16);color:#3fb950}#osmosis-ver.stale{color:#f87171}}}@media (hover:hover) and (pointer:fine){#osmosis-ver{left:14px;bottom:14px}}
+    </style>
+    <div id="osmosis-ver">@OSMOSIS_VERSION@</div>
+    <script src="https://osmosis.work/osmosis-badge.js"></script>
+  </body>
+</html>

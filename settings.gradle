@@ -1,0 +1,10 @@
+rootProject.name = 'apartment-planner'
+
+// auth-core carries the shared login check (SsoCookieAuthFilter + SsoSecurityConfig), and
+// version-core the /version endpoint every app in the fleet serves. Both are vendored as plain
+// folders so this repo builds on its own.
+include ':auth-core'
+include ':version-core'
+
+// The 3D frontend, a project of its own so the build makes it alongside the Java code.
+include ':frontend'
